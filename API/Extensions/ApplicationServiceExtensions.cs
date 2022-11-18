@@ -1,6 +1,6 @@
 
 using System;
-using Application.Activities;
+using Application.Profiles;
 using Application.Core;
 using Application.Interfaces;
 using Infrastructure.Email;
@@ -68,7 +68,7 @@ namespace API.Extensions
               policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithExposedHeaders("www-authenticate", "pagination").WithOrigins("http://localhost:3000");
             });
       });
-      services.AddMediatR(typeof(List.Handler).Assembly);
+      services.AddMediatR(typeof(Details.Handler).Assembly);
       services.AddAutoMapper(typeof(MappingProfiles).Assembly);
       services.AddScoped<IUserAccessor, UserAccessor>();
       services.AddScoped<IPhotoAccessor, PhotoAccessor>();

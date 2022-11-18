@@ -19,15 +19,12 @@ export default observer(function HomePage() {
             className='mainLogo'
             style={{ marginBottom: 12 }}
           />
-          uclimb.com
+          She Climbs Rocks
         </Header>
 
         {userStore.isLoggedIn ? (
           <>
-            <Header a='h2' inverted context='Wellcome to uclimb.com' />
-            <Button as={Link} to='/activities' size='huge' style={{ color: "purple" }}>
-              Go to Activites!
-            </Button>
+            <Header a='h2' inverted context='Wellcome to sheclimbsrocks' />
           </>
         ) : (
           <>

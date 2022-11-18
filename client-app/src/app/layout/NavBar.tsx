@@ -20,10 +20,6 @@ export default observer(function NavBar({}: Props) {
         </Menu.Item>
         {isLoggedIn && (
           <>
-            <Menu.Item as={NavLink} to='/activities' name='Activities' />
-            <Menu.Item as={NavLink} to='/createActivity'>
-              <Button positive content='Create Activity' />
-            </Menu.Item>
             <Menu.Item position='right'>
               <Image src={user?.image || "/assets/user.png"} avatar spaced='right' />
               <Dropdown pointing='top left' text={user?.displayName}>

@@ -4,11 +4,9 @@ import { arrayExtensions } from "mobx/dist/internal";
 import { config } from "process";
 import { toast } from "react-toastify";
 import { history } from "../..";
-import { Activity, ActivityFormValues } from "../models/activity";
 import { PaginatedResult } from "../models/pagination";
 import { Photo, Profile, ProfileFormValues } from "../models/profile";
 import { User, UserFormvalues } from "../models/user";
-import { UserActivity } from "../models/userActivity";
 import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
@@ -83,17 +81,6 @@ const requests = {
   delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
-const Activities = {
-  list: (params: URLSearchParams) =>
-    axios.get<PaginatedResult<Activity[]>>("/activities", { params }).then(responseBody),
-  details: (id: string) => requests.get<Activity>(`/activities/${id}`),
-  create: (activity: ActivityFormValues) => requests.post<Activity>("/activities", activity),
-  update: (activity: ActivityFormValues) =>
-    requests.put<Activity>(`/activities/${activity.id}`, activity),
-  delete: (id: string) => requests.delete<void>(`/activities/${id}`),
-  attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}),
-};
-
 const Account = {
   current: () => requests.get<User>("/account"),
   login: (user: UserFormvalues) => requests.post<User>("/account/login", user),
@@ -104,30 +91,8 @@ const Account = {
   resendEmailConfirm: (email: string) => requests.get(`/account/resendEmailConfirmationLink?email=${email}`)
 };
 
-const Profiles = {
-  get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
-  uploadPhoto: (file: Blob) => {
-    let formData = new FormData();
-    formData.append("File", file);
-    return axios.post<Photo>("photos", formData, {
-      headers: { "Content-type": "multipart/form-data" },
-    });
-  },
-  setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
-  deletePhoto: (id: string) => requests.delete(`/photos/${id}`),
-  updateProfile: (profile: ProfileFormValues) =>
-    requests.post(`/profiles/${store.userStore.user?.username}`, profile),
-  updateFollowing: (username: string) => requests.post(`/follow/${username}`, {}),
-  listFollowings: (username: string, predicate: string) =>
-    requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
-  activities: (params: URLSearchParams) => 
-    axios.get<UserActivity[]>(`/profiles/${store.profileStore.profile?.username}/activities`, {params}).then(responseBody),
-};
-
 const agent = {
-  Activities,
   Account,
-  Profiles,
 };
 
 export default agent;

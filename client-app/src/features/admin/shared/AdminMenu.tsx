@@ -14,7 +14,6 @@ export default function AdminMenu({}: Props) {
       </Menu.Header>
       <Menu.Item as={NavLink} to='/admin/blogs' content='Blogs' />
       <Menu.Item as={NavLink} to='/admin/users' content='Users' />
-      <Menu.Item as={NavLink} to='/admin/activities' content='Activities' />
       <Menu.Item as={NavLink} to='/admin/contacts' content='Contacts' />
       <Menu.Item as={NavLink} to='/admin/settings' content='Settings' />
     </Container>

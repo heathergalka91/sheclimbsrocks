@@ -1,4 +1,4 @@
-using Application.Activities;
+using Application.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ builder.Services.AddControllers(opt =>
 })
 .AddFluentValidation(config =>
 {
-  config.RegisterValidatorsFromAssemblyContaining<Create>();
+  config.RegisterValidatorsFromAssemblyContaining<Edit>();
 });
 
 builder.Services.AddApplicationServices(builder.Configuration);
@@ -74,7 +74,7 @@ app.UseAuthorization();
 
 
 app.MapControllers();
-app.MapHub<ChatHub>("/chat");
+//app.MapHub<ChatHub>("/chat");
 app.MapFallbackToController("Index", "Fallback");
 
 

@@ -1,7 +1,7 @@
 global using System;
 global using API.Extensions;
 global using API.Middleware;
-global using API.SignalR;
+//global using API.SignalR;
 global using Domain;
 global using FluentValidation.AspNetCore;
 global using Microsoft.AspNetCore.Authorization;
