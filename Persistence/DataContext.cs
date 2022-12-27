@@ -15,6 +15,7 @@ namespace Persistence
     }
 
     public DbSet<Photo> Photos { get; set; }
+    public DbSet<PlaidToken> PlaidTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

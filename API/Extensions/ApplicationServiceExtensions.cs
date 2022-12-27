@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using Infrastructure.Plaid;
 
 namespace API.Extensions
 {
@@ -36,6 +37,7 @@ namespace API.Extensions
           {
             // Use connection string from file.
             connStr = config.GetConnectionString("DefaultConnection");
+            options.UseSqlite(connStr);
           }
           else
           {
@@ -54,11 +56,10 @@ namespace API.Extensions
             var pgPort = pgHostPort.Split(":")[1];
 
             connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb}; SSL Mode=Require; Trust Server Certificate=true";
-          }
-
-          // Whether the connection string came from the local development configuration file
+                   // Whether the connection string came from the local development configuration file
           // or from the environment variable from Heroku, use it to set up your DbContext.
           options.UseNpgsql(connStr);
+          }
         });
 
       services.AddCors(setupAction: opt =>
@@ -72,8 +73,10 @@ namespace API.Extensions
       services.AddAutoMapper(typeof(MappingProfiles).Assembly);
       services.AddScoped<IUserAccessor, UserAccessor>();
       services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+      services.AddScoped<IBankAccessor, PlaidAccessor>();
       services.AddScoped<EmailSender>();
       services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
+      services.Configure<PlaidSettings>(config.GetSection("Plaid"));
       services.AddSignalR();
 
       return services;

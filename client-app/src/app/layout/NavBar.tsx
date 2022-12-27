@@ -16,17 +16,17 @@ export default observer(function NavBar({}: Props) {
       <Container>
         <Menu.Item as={NavLink} to='/' exact header>
           <img src='/assets/logo.png' alt='logo' style={{ marginRight: "10px" }}></img>
-          uclimb.com
+          sheclimbsrocks.com
         </Menu.Item>
         {isLoggedIn && (
           <>
             <Menu.Item position='right'>
               <Image src={user?.image || "/assets/user.png"} avatar spaced='right' />
-              <Dropdown pointing='top left' text={user?.displayName}>
+              <Dropdown pointing='top left' text={user?.firstName}>
                 <Dropdown.Menu>
                   <Dropdown.Item
                     as={Link}
-                    to={`/profiles/${user?.username}`}
+                    to={`my-account`}
                     text='My Profile'
                     icon='user'
                   />

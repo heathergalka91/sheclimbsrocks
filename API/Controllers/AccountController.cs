@@ -77,7 +77,7 @@ namespace API.Controllers
         ModelState.AddModelError("email", "Email taken");
         return ValidationProblem();
       }
-      if (await _userManager.Users.AnyAsync(u => u.UserName == registerDto.Username))
+      if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email))
       {
         ModelState.AddModelError("username", "Username taken");
         return ValidationProblem();
@@ -85,14 +85,15 @@ namespace API.Controllers
 
       var user = new AppUser
       {
-        DisplayName = registerDto.DisplayName,
+        FirstName = registerDto.FirstName,
+        LastName = registerDto.LastName,
         Email = registerDto.Email,
-        UserName = registerDto.Username
+        UserName = registerDto.Email
       };
 
       var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-      if (!result.Succeeded) return BadRequest("Problem registering user");
+      if (!result.Succeeded) return BadRequest(result.Errors);
 
       var origin = Request.Headers["origin"];
       var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -143,7 +144,6 @@ namespace API.Controllers
       return Ok("Email verification link resent");
     }
 
-
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
@@ -154,54 +154,6 @@ namespace API.Controllers
       return CreateUserObject(user);
     }
     [AllowAnonymous]
-
-    [HttpPost("fbLogin")]
-    public async Task<ActionResult<UserDto>> FacebookLogin(string accessToken)
-    {
-      var fbVerifyKeys = _config["Facebook:AppId"] + "|" + _config["Facebook:AppSecret"];
-
-      var verifyToken = await _httpClient.GetAsync($"debug_token?input_token={accessToken}&access_token={fbVerifyKeys}");
-
-      if (!verifyToken.IsSuccessStatusCode) return Unauthorized();
-
-      var fbUrl = $"me?access_token={accessToken}&fields=name,email,picture.width(100).height(100)";
-
-      var response = await _httpClient.GetAsync(fbUrl);
-
-      if (!response.IsSuccessStatusCode) return Unauthorized();
-
-      var fbInfo = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-
-      var username = (string)fbInfo.id;
-
-      var user = await _userManager.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == username);
-
-      if (user != null) return CreateUserObject(user);
-
-      user = new AppUser
-      {
-        DisplayName = (string)fbInfo.name,
-        Email = (string)fbInfo.email,
-        UserName = (string)fbInfo.id,
-        Photos = new List<Photo>
-        {
-          new Photo
-          {
-            Id = "fb_" + (string)fbInfo.id,
-            Url = (string)fbInfo.picture.data.url,
-            IsMain = true
-          }}
-      };
-
-      user.EmailConfirmed = true;
-
-      var result = await _userManager.CreateAsync(user);
-
-      if (!result.Succeeded) return BadRequest("Problem reated user account");
-
-      await SetRefreshToken(user);
-      return CreateUserObject(user);
-    }
 
     [Authorize]
     [HttpPost("refreshToken")]
@@ -235,15 +187,13 @@ namespace API.Controllers
       Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
     }
 
-
     private UserDto CreateUserObject(AppUser user)
     {
       return new UserDto
       {
-        DisplayName = user.DisplayName,
+        FirstName = user.FirstName,
         Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
         Token = _tokenService.CreateToken(user),
-        Username = user.UserName,
       };
     }
   }

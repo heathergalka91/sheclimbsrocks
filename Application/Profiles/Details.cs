@@ -12,13 +12,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Profiles
+namespace Application.Profiles 
 {
   public class Details
   {
     public class Query : IRequest<Result<ProfileDto>>
     {
-      public string Username { get; set; }
+      public string Email { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<ProfileDto>>
@@ -37,7 +37,7 @@ namespace Application.Profiles
       {
         var user = await _context.Users
             .ProjectTo<ProfileDto>(_mapper.ConfigurationProvider, new {username = _userAccessor.GetUsername()})
-            .SingleOrDefaultAsync(f => f.Username == request.Username);
+            .SingleOrDefaultAsync(f => f.Email == request.Email);
 
         if (user == null) return null;
         return Result<ProfileDto>.Success(user);

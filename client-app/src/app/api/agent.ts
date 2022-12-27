@@ -5,7 +5,7 @@ import { config } from "process";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { PaginatedResult } from "../models/pagination";
-import { Photo, Profile, ProfileFormValues } from "../models/profile";
+import { PlaidResponse } from "../models/plaid";
 import { User, UserFormvalues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -91,8 +91,13 @@ const Account = {
   resendEmailConfirm: (email: string) => requests.get(`/account/resendEmailConfirmationLink?email=${email}`)
 };
 
+const Plaid = {
+  linkToken: () => requests.post<PlaidResponse>("/plaid", {})
+};
+
 const agent = {
   Account,
+  Plaid
 };
 
 export default agent;

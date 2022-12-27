@@ -54,7 +54,6 @@ export default class UserStore {
       await agent.Account.register(creds);
       history.push(`/account/registerSuccess?email=${creds.email}`);
       store.modalStore.closeModal();
-      store.modalStore.closeModal();
     } catch (err) {
       throw err;
     }
@@ -66,8 +65,8 @@ export default class UserStore {
     }
   };
 
-  setDisplayName = (displayName: string) => {
-    this.user!.displayName = displayName;
+  setFirstName = (firstName: string) => {
+    this.user!.firstName = firstName;
   };
 
   getFacebokLoginStatus = async () => {

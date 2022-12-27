@@ -44,8 +44,8 @@ namespace Application.Profiles
 
         if (user == null) return null;
 
-        user.Bio = request.Profile.Bio;
-        user.DisplayName = request.Profile.DisplayName;
+        user.FirstName = request.Profile.FirstName;
+        user.LastName = request.Profile.LastName;
 
         var result = await _userManager.UpdateAsync(user);
 

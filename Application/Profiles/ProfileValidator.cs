@@ -10,8 +10,8 @@ namespace Application.Profiles
   {
     public ProfileValidator()
     {
-        RuleFor(x => x.Bio).NotEmpty();
-        RuleFor(x => x.DisplayName).NotEmpty();
+        RuleFor(x => x.FirstName).NotEmpty();
+        RuleFor(x => x.LastName).NotEmpty();
     }
   }
 }

@@ -1,8 +1,8 @@
 import { User } from "./user";
 
 export interface Profile {
-  username: string;
-  displayName: string;
+  firstName: string;
+  email: string;
   image?: string;
   bio?: string;
   followersCount: number;
@@ -13,8 +13,7 @@ export interface Profile {
 
 export class Profile implements Profile {
   constructor(user: User) {
-    this.username = user.username;
-    this.displayName = user.displayName;
+    this.firstName = user.firstName;
     this.image = user.image;
   }
 }

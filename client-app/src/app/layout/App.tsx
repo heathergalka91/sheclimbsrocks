@@ -44,7 +44,6 @@ function App() {
           render={() => (
             <>
               <ToastContainer position='bottom-right' hideProgressBar />
-              <NavBar />
               <Container style={{ marginTop: "7em" }}>
                 <Switch>
                   <Route path='/' exact component={HomePage} />
